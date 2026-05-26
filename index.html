@@ -1,238 +1,396 @@
-<!DOCTYPE html><html lang="fr">
+
+<!DOCTYPE html>
+<html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Porc Royal Calavi</title>
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }body {
-  background: #0f0f0f;
-  color: white;
-  line-height: 1.6;
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Porc Royal Calavi</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial, sans-serif;
 }
 
-header {
-  background: linear-gradient(to right, #000000, #2b0000);
-  padding: 30px 20px;
-  text-align: center;
-  border-bottom: 4px solid #c40000;
+body{
+background:#080808;
+color:white;
+line-height:1.6;
+overflow-x:hidden;
 }
 
-.logo {
-  width: 180px;
-  border-radius: 20px;
-  margin-bottom: 15px;
+header{
+height:100vh;
+background:
+linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.75)),
+url('https://images.unsplash.com/photo-1544025162-d76694265947?q=80&w=1200&auto=format&fit=crop');
+background-size:cover;
+background-position:center;
+display:flex;
+align-items:center;
+justify-content:center;
+text-align:center;
+padding:20px;
 }
 
-h1 {
-  font-size: 3rem;
-  color: #f5c542;
+.hero{
+max-width:900px;
+animation:fadeIn 2s ease;
 }
 
-.slogan {
-  font-size: 1.2rem;
-  color: #ffffff;
-  margin-top: 10px;
+.logo{
+width:240px;
+max-width:90%;
+border-radius:20px;
+box-shadow:0 0 25px rgba(255,215,0,0.4);
+margin-bottom:25px;
 }
 
-.hero {
-  padding: 50px 20px;
-  text-align: center;
-  background: url('https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba?q=80&w=1200&auto=format&fit=crop') center/cover;
+h1{
+font-size:4rem;
+color:#f5c542;
+margin-bottom:10px;
 }
 
-.hero h2 {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-  text-shadow: 2px 2px 10px black;
+.slogan{
+font-size:1.4rem;
+margin-bottom:30px;
+color:#ffffff;
 }
 
-.hero p {
-  font-size: 1.2rem;
-  max-width: 700px;
-  margin: auto;
-  background: rgba(0,0,0,0.6);
-  padding: 15px;
-  border-radius: 10px;
+.btn{
+display:inline-block;
+padding:16px 35px;
+background:#c40000;
+color:white;
+text-decoration:none;
+border-radius:12px;
+font-weight:bold;
+font-size:1.1rem;
+transition:0.3s;
+box-shadow:0 0 15px rgba(255,0,0,0.4);
 }
 
-.btn {
-  display: inline-block;
-  margin-top: 25px;
-  background: #c40000;
-  color: white;
-  padding: 15px 30px;
-  border-radius: 10px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: 0.3s;
+.btn:hover{
+background:#ff0000;
+transform:scale(1.05);
 }
 
-.btn:hover {
-  background: #f5c542;
-  color: black;
+section{
+padding:80px 20px;
+max-width:1200px;
+margin:auto;
 }
 
-section {
-  padding: 60px 20px;
+.section-title{
+text-align:center;
+font-size:2.5rem;
+color:#f5c542;
+margin-bottom:50px;
 }
 
-.section-title {
-  text-align: center;
-  font-size: 2.2rem;
-  color: #f5c542;
-  margin-bottom: 40px;
+.features{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
 }
 
-.services {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 20px;
+.card{
+background:#141414;
+padding:30px;
+border-radius:18px;
+text-align:center;
+border:1px solid #2a2a2a;
+transition:0.4s;
 }
 
-.card {
-  background: #1b1b1b;
-  border: 1px solid #c40000;
-  border-radius: 15px;
-  padding: 25px;
-  text-align: center;
-  transition: 0.3s;
+.card:hover{
+transform:translateY(-10px);
+border-color:#c40000;
+box-shadow:0 0 25px rgba(255,0,0,0.3);
 }
 
-.card:hover {
-  transform: translateY(-5px);
-  border-color: #f5c542;
+.card h3{
+margin:15px 0;
+color:#f5c542;
 }
 
-.card h3 {
-  margin-bottom: 10px;
-  color: #f5c542;
+.gallery{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:20px;
 }
 
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 15px;
+.gallery img{
+width:100%;
+height:320px;
+object-fit:cover;
+border-radius:20px;
+transition:0.4s;
 }
 
-.gallery img {
-  width: 100%;
-  border-radius: 15px;
-  height: 250px;
-  object-fit: cover;
-  border: 2px solid #c40000;
+.gallery img:hover{
+transform:scale(1.03);
 }
 
-.about {
-  max-width: 900px;
-  margin: auto;
-  text-align: center;
-  font-size: 1.1rem;
+.restaurant{
+background:#111;
+border-radius:25px;
+overflow:hidden;
+box-shadow:0 0 30px rgba(0,0,0,0.5);
 }
 
-.ornella {
-  background: #161616;
-  border-left: 4px solid #f5c542;
-  padding: 30px;
-  border-radius: 15px;
-  margin-top: 30px;
-  text-align: center;
+.restaurant img{
+width:100%;
+display:block;
 }
 
-footer {
-  background: black;
-  padding: 40px 20px;
-  text-align: center;
-  border-top: 4px solid #c40000;
+.restaurant-text{
+padding:35px;
+text-align:center;
 }
 
-footer h3 {
-  color: #f5c542;
-  margin-bottom: 15px;
+.restaurant-text h2{
+color:#f5c542;
+margin-bottom:20px;
+font-size:2rem;
 }
 
-.contact {
-  font-size: 1.1rem;
-  margin-top: 10px;
+.ornella{
+background:linear-gradient(to bottom,#151515,#0a0a0a);
+border-radius:25px;
+padding:50px 20px;
+text-align:center;
 }
 
-@media(max-width: 768px) {
-  h1 {
-    font-size: 2rem;
-  }
-
-  .hero h2 {
-    font-size: 1.8rem;
-  }
+.ornella-gallery{
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:30px;
+margin-top:35px;
 }
 
-  </style>
+.ornella-gallery img{
+width:300px;
+max-width:90%;
+border-radius:25px;
+box-shadow:0 0 30px rgba(255,215,0,0.15);
+}
+
+.ornella p{
+max-width:800px;
+margin:auto;
+font-size:1.1rem;
+color:#ddd;
+}
+
+footer{
+background:#000;
+padding:50px 20px;
+text-align:center;
+border-top:2px solid #c40000;
+}
+
+footer h3{
+color:#f5c542;
+font-size:2rem;
+margin-bottom:20px;
+}
+
+.contact{
+font-size:1.2rem;
+margin-bottom:10px;
+}
+
+.whatsapp-float{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#25D366;
+color:white;
+padding:18px 22px;
+border-radius:50px;
+text-decoration:none;
+font-weight:bold;
+box-shadow:0 0 20px rgba(0,0,0,0.4);
+z-index:999;
+}
+
+@keyframes fadeIn{
+from{
+opacity:0;
+transform:translateY(40px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
+@media(max-width:768px){
+
+h1{
+font-size:2.5rem;
+}
+
+.slogan{
+font-size:1.1rem;
+}
+
+.section-title{
+font-size:2rem;
+}
+
+}
+
+</style>
 </head>
-<body>  <header>
-    <img class="logo" src="https://i.imgur.com/L8sP5Yw.png" alt="Porc Royal Calavi Logo">
-    <h1>PORC ROYAL CALAVI</h1>
-    <p class="slogan">Le vrai goût du porc au Bénin</p>
-  </header>  <section class="hero">
-    <h2>Viande fraîche • Grillade • Livraison</h2>
-    <p>
-      Une référence à Calavi pour la qualité, l’assainissement et les vraies saveurs du porc au Bénin.
-    </p>
-    <a class="btn" href="https://wa.me/2290152001356">Commander sur WhatsApp</a>
-  </section>  <section>
-    <h2 class="section-title">Nos spécialités</h2><div class="services">
-  <div class="card">
-    <h3>🐖 Viande fraîche</h3>
-    <p>Porc frais sélectionné avec soin et préparé dans de bonnes conditions d’hygiène.</p>
-  </div>
 
-  <div class="card">
-    <h3>🔥 Porc grillé</h3>
-    <p>Une grillade savoureuse avec le vrai goût qui fait la réputation de Porc Royal Calavi.</p>
-  </div>
+<body>
 
-  <div class="card">
-    <h3>🍳 Porc frit</h3>
-    <p>Des morceaux croustillants et bien assaisonnés pour les vrais amateurs.</p>
-  </div>
+<header>
 
-  <div class="card">
-    <h3>🛵 Livraison rapide</h3>
-    <p>Commandez et recevez rapidement votre viande partout autour de Calavi.</p>
-  </div>
+<div class="hero">
+
+<img src="https://i.imgur.com/eQyKy3g.png" class="logo">
+
+<h1>PORC ROYAL CALAVI</h1>
+
+<p class="slogan">
+Le vrai goût du porc au Bénin
+</p>
+
+<a class="btn" href="https://wa.me/2290152001356">
+Commander sur WhatsApp
+</a>
+
 </div>
 
-  </section>  <section>
-    <h2 class="section-title">Notre ambiance</h2><div class="gallery">
-  <img src="https://images.unsplash.com/photo-1558030006-450675393462?q=80&w=1200&auto=format&fit=crop" alt="Grillade">
-  <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1200&auto=format&fit=crop" alt="Restaurant">
-  <img src="https://images.unsplash.com/photo-1528605248644-14dd04022da1?q=80&w=1200&auto=format&fit=crop" alt="Cuisine">
+</header>
+
+<section>
+
+<h2 class="section-title">
+Pourquoi Porc Royal Calavi ?
+</h2>
+
+<div class="features">
+
+<div class="card">
+<h3>🔥 Grillades Premium</h3>
+<p>
+Des grillades savoureuses préparées avec soin et maîtrise.
+</p>
 </div>
 
-  </section>  <section>
-    <h2 class="section-title">À propos</h2><div class="about">
-  <p>
-    Porc Royal Calavi est un projet construit avec passion.
-    Notre objectif est d’offrir à Calavi un espace propre, accueillant et moderne autour du porc frais et des grillades de qualité.
-  </p>
-
-  <div class="ornella">
-    <h3>✨ Coin Ornella</h3>
-    <p>
-      Un espace discret et symbolique en hommage à Ornella, gardé avec amour dans l’histoire de Porc Royal Calavi.
-    </p>
-  </div>
+<div class="card">
+<h3>🥩 Viande Fraîche</h3>
+<p>
+Une viande sélectionnée avec exigence et dans le respect de l’assainissement.
+</p>
 </div>
 
-  </section>  <footer>
-    <h3>Porc Royal Calavi</h3><p class="contact">📞 0152001356</p>
-<p class="contact">🕗 Ouvert tous les jours sauf mardi — 8h à 21h30</p>
-<p class="contact">📍 Calavi — Bénin</p>
+<div class="card">
+<h3>🚚 Livraison Rapide</h3>
+<p>
+Commandez facilement et recevez rapidement vos plats.
+</p>
+</div>
 
-<a class="btn" href="https://wa.me/2290152001356">Commander maintenant</a>
+</div>
 
-  </footer></body>
-                                        </html>
+</section>
+
+<section>
+
+<h2 class="section-title">
+Nos Grillades
+</h2>
+
+<div class="gallery">
+
+<img src="https://images.unsplash.com/photo-1558030006-450675393462?q=80&w=1200&auto=format&fit=crop">
+
+<img src="https://images.unsplash.com/photo-1529193591184-b1d58069ecdd?q=80&w=1200&auto=format&fit=crop">
+
+<img src="https://images.unsplash.com/photo-1529692236671-f1dc54e50d6b?q=80&w=1200&auto=format&fit=crop">
+
+</div>
+
+</section>
+
+<section class="restaurant">
+
+<img src="https://i.imgur.com/YOURIMAGE.jpg">
+
+<div class="restaurant-text">
+
+<h2>
+Une Référence à Calavi
+</h2>
+
+<p>
+Porc Royal Calavi est devenu une référence grâce à la qualité,
+l’assainissement et le respect du vrai goût du porc au Bénin.
+</p>
+
+</div>
+
+</section>
+
+<section class="ornella">
+
+<h2 class="section-title">
+✨ Coin Ornella
+</h2>
+
+<p>
+Une présence de cœur dans l’histoire de Porc Royal Calavi.
+Un espace discret et symbolique gardé avec amour.
+</p>
+
+<div class="ornella-gallery">
+
+<img src="https://i.imgur.com/ORNELLA1.jpg">
+
+<img src="https://i.imgur.com/ORNELLA2.jpg">
+
+</div>
+
+</section>
+
+<footer>
+
+<h3>Porc Royal Calavi</h3>
+
+<p class="contact">
+📞 0152001356
+</p>
+
+<p class="contact">
+📍 Calavi — Bénin
+</p>
+
+<p class="contact">
+🕒 Ouvert tous les jours sauf mardi — 8h à 21h30
+</p>
+
+<br>
+
+<a class="btn" href="https://wa.me/2290152001356">
+Commander maintenant
+</a>
+
+</footer>
+
+<a class="whatsapp-float"
+href="https://wa.me/2290152001356">
+WhatsApp
+</a>
+
+</body>
+</html>
