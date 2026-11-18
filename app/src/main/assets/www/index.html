@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#702d18"><link rel="manifest" href="manifest.webmanifest">
+<title>Gestion Royale</title>
+<style>
+:root{--brown:#702d18;--gold:#e7b64b;--bg:#f6f3ef;--ink:#28231f;--muted:#756d66}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,Arial}
+header{background:var(--brown);color:white;padding:18px 16px;position:sticky;top:0;z-index:2}
+header strong{font-size:21px}header small{display:block;opacity:.85;margin-top:3px}
+nav{display:flex;gap:7px;overflow:auto;padding:10px;background:white;position:sticky;top:76px;z-index:2}
+nav button{border:0;background:#eee5df;color:var(--brown);padding:10px 13px;border-radius:22px;white-space:nowrap;font-weight:650}
+nav button.active{background:var(--brown);color:white}
+main{padding:14px;max-width:850px;margin:auto}.page{display:none}.page.active{display:block}
+.card{background:white;border-radius:14px;padding:15px;margin:0 0 13px;box-shadow:0 2px 8px #3322110c}
+h2{font-size:19px;margin:4px 0 14px}h3{font-size:16px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.metric{background:#fff;border-radius:12px;padding:13px}
+.metric b{display:block;font-size:21px;color:var(--brown);margin-top:5px}.muted{color:var(--muted);font-size:13px}
+label{display:block;font-weight:600;margin:10px 0 5px}input,select{width:100%;padding:11px;border:1px solid #ddd3ca;border-radius:9px;background:#fff;font:inherit}
+button.primary{background:var(--brown);color:white;border:0;padding:12px 16px;border-radius:9px;font-weight:700;margin-top:12px;width:100%}
+button.secondary{background:#eee5df;color:var(--brown);border:0;padding:8px 10px;border-radius:8px}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #eee}.row:last-child{border:0}
+.row b{display:block}.tag{font-size:12px;color:var(--muted)}.danger{color:#a52d20}
+table{width:100%;border-collapse:collapse;font-size:14px}td,th{text-align:left;padding:9px 5px;border-bottom:1px solid #eee}
+@media(min-width:650px){.grid{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header><strong>👑 Gestion Royale</strong><small>Le Grill Porc Royal · Gestion quotidienne</small></header>
+<nav id="tabs">
+<button class="active" data-page="home">Accueil</button><button data-page="products">Produits</button><button data-page="stock">Stocks</button><button data-page="buy">Approvisionnement</button><button data-page="lot">Lot de porc</button><button data-page="sell">Ventes</button><button data-page="expenses">Dépenses</button><button data-page="history">Historique</button>
+</nav>
+<main>
+<section id="home" class="page active">
+<h2>Tableau de bord</h2><div class="grid">
+<div class="metric">Ventes du jour<b id="todaySales">0 F</b></div>
+<div class="metric">Dépenses du jour<b id="todayExpenses">0 F</b></div>
+<div class="metric">Nombre de ventes<b id="salesCount">0</b></div>
+<div class="metric">Produits suivis<b id="productCount">0</b></div></div>
+<div class="card" style="margin-top:13px"><h3>État des stocks</h3><div id="lowStock"></div></div>
+<div class="card"><h3>À savoir</h3><p class="muted">Cette première version conserve les données sur ce téléphone. La synchronisation entre plusieurs téléphones et les comptes employés seront ajoutés dans une prochaine étape.</p></div>
+</section>
+<section id="products" class="page"><h2>Catalogue des produits</h2>
+<div class="card"><h3>Ajouter un produit</h3><label>Nom</label><input id="pname" placeholder="Ex. Alloco"><label>Unité</label><select id="punit"><option>kg</option><option>portion</option><option>pièce</option><option>bouteille</option><option>carton</option><option>litre</option></select><label>Prix de vente (FCFA)</label><input id="pprice" type="number" min="0" value="0"><button class="primary" onclick="addProduct()">Ajouter le produit</button></div>
+<div class="card"><div id="productList"></div></div></section>
+<section id="stock" class="page"><h2>Stocks disponibles</h2><div class="card"><div id="stockList"></div></div></section>
+<section id="buy" class="page"><h2>Approvisionnement</h2>
+<div class="card"><label>Produit reçu</label><select id="buyProduct"></select><label>Quantité reçue</label><input id="buyQty" type="number" min=".01" step=".01"><label>Coût total d'achat (FCFA)</label><input id="buyCost" type="number" min="0"><label>Fournisseur (facultatif)</label><input id="supplier" placeholder="Nom du fournisseur"><button class="primary" onclick="buyStock()">Enregistrer l'approvisionnement</button></div>
+<div class="card"><h3>Règle de réception du porc</h3><p class="muted">Pour l'instant, enregistre les catégories comme produits distincts. La fiche de lot avec poids vivant, poids récupéré et répartition détaillée sera ajoutée dans l'étape suivante.</p></div>
+</section>
+
+<section id="lot" class="page"><h2>Réception d'un porc entier</h2>
+<div class="card">
+<p class="muted">Saisis les coûts du porc et les poids réellement récupérés. Le coût moyen et le coût attribué à chaque catégorie seront calculés automatiquement.</p>
+<label>Coût d'achat du porc (FCFA)</label><input id="lotPurchase" type="number" min="0" value="0" oninput="updateLotCalc()">
+<label>Frais d'abattage (FCFA)</label><input id="lotSlaughter" type="number" min="0" value="0" oninput="updateLotCalc()">
+<label>Frais de transport (FCFA)</label><input id="lotTransport" type="number" min="0" value="0" oninput="updateLotCalc()">
+<label>Autres frais liés au lot (FCFA)</label><input id="lotOther" type="number" min="0" value="0" oninput="updateLotCalc()">
+</div>
+<div class="card"><h3>Poids récupérés par catégorie</h3>
+<div id="lotCategories"></div>
+<div class="grid" style="margin-top:12px">
+<div class="metric">Poids récupéré total<b id="lotWeight">0 kg</b></div>
+<div class="metric">Coût total du lot<b id="lotTotal">0 F</b></div>
+<div class="metric">Coût moyen récupéré<b id="lotAverage">0 F/kg</b></div>
+<div class="metric">Écart de poids<b id="lotCheck">À saisir</b></div>
+</div>
+<div id="lotBreakdown" style="margin-top:12px"></div>
+<button class="primary" onclick="saveLot()">Enregistrer le lot et alimenter les stocks</button>
+</div>
+</section>
+<section id="sell" class="page"><h2>Enregistrer une vente</h2><div class="card"><label>Produit</label><select id="sellProduct"></select><label>Quantité</label><input id="sellQty" type="number" min=".01" step=".01"><label>Prix unitaire (FCFA)</label><input id="sellPrice" type="number" min="0"><label>Employé (saisie provisoire)</label><input id="seller" placeholder="Nom de l'employé"><button class="primary" onclick="sell()">Valider la vente</button></div></section>
+<section id="expenses" class="page"><h2>Enregistrer une dépense</h2><div class="card"><label>Motif</label><input id="expenseName" placeholder="Ex. charbon, transport"><label>Montant (FCFA)</label><input id="expenseAmount" type="number" min="1"><label>Payé par</label><input id="expenseBy" placeholder="Nom"><button class="primary" onclick="addExpense()">Enregistrer la dépense</button></div></section>
+<section id="history" class="page"><h2>Historique récent</h2><div class="card"><div id="historyList"></div></div><button class="secondary" onclick="exportData()">Exporter une sauvegarde JSON</button> <button class="secondary" onclick="resetData()">Effacer les données</button></section>
+</main>
+<script>
+const KEY='gestionRoyaleV1';
+let db=JSON.parse(localStorage.getItem(KEY)||'null')||{products:[
+{id:1,name:'Porc frais',unit:'kg',price:3000,stock:0},{id:2,name:'Tête et pieds',unit:'kg',price:2200,stock:0},{id:3,name:'Boyaux',unit:'kg',price:1800,stock:0},{id:4,name:'Porc grillé',unit:'portion',price:0,stock:0},{id:5,name:'Porc frit',unit:'portion',price:0,stock:0},{id:6,name:'Alloco',unit:'portion',price:0,stock:0}],moves:[]};
+function save(){localStorage.setItem(KEY,JSON.stringify(db));render()}
+function money(n){return Math.round(n||0).toLocaleString('fr-FR')+' F'}
+function today(){return new Date().toLocaleDateString('fr-CA')}
+function addMove(type,label,qty,amount,detail=''){db.moves.unshift({type,label,qty,amount,detail,date:new Date().toISOString()})}
+function addProduct(){let name=pname.value.trim(),unit=punit.value,price=+pprice.value;if(!name)return alert('Indique le nom du produit.');db.products.push({id:Date.now(),name,unit,price,stock:0});pname.value='';pprice.value=0;save();buildLotCategories()}
+function fillSelect(id){let s=document.getElementById(id),old=s.value;s.innerHTML=db.products.map(p=>`<option value="${p.id}">${p.name} (${p.unit})</option>`).join('');if([...s.options].some(o=>o.value===old))s.value=old}
+function buyStock(){let p=db.products.find(x=>x.id==buyProduct.value),q=+buyQty.value,c=+buyCost.value;if(!p||q<=0||c<0)return alert('Vérifie le produit, la quantité et le coût.');p.stock+=q;addMove('Approvisionnement',p.name,q,c,supplier.value);buyQty.value='';buyCost.value='';supplier.value='';save();alert('Approvisionnement enregistré.')}
+function sell(){let p=db.products.find(x=>x.id==sellProduct.value),q=+sellQty.value,price=+sellPrice.value;if(!p||q<=0||price<0)return alert('Vérifie les informations.');if(q>p.stock)return alert('Stock insuffisant. Stock disponible : '+p.stock+' '+p.unit);p.stock-=q;addMove('Vente',p.name,q,q*price,seller.value);sellQty.value='';save();alert('Vente enregistrée.')}
+function addExpense(){let n=expenseName.value.trim(),a=+expenseAmount.value;if(!n||a<=0)return alert('Indique le motif et un montant valide.');addMove('Dépense',n,0,a,expenseBy.value);expenseName.value='';expenseAmount.value='';save();alert('Dépense enregistrée.')}
+
+function lotProducts(){return db.products.filter(p=>['kg'].includes(p.unit));}
+function buildLotCategories(){
+ const el=document.getElementById('lotCategories');
+ el.innerHTML=lotProducts().map(p=>`<div class="row" style="display:block"><label>${p.name} — poids récupéré (${p.unit})</label><input class="lot-qty" data-id="${p.id}" type="number" min="0" step=".01" value="0" oninput="updateLotCalc()"></div>`).join('');
+ updateLotCalc();
+}
+function lotValues(){
+ const purchase=+(document.getElementById('lotPurchase')?.value||0), slaughter=+(document.getElementById('lotSlaughter')?.value||0), transport=+(document.getElementById('lotTransport')?.value||0), other=+(document.getElementById('lotOther')?.value||0);
+ const totalCost=purchase+slaughter+transport+other;
+ const rows=[...document.querySelectorAll('.lot-qty')].map(input=>({p:db.products.find(p=>p.id==input.dataset.id),q:+input.value||0}));
+ const totalWeight=rows.reduce((s,r)=>s+r.q,0);
+ return {purchase,slaughter,transport,other,totalCost,rows,totalWeight,average:totalWeight?totalCost/totalWeight:0};
+}
+function updateLotCalc(){
+ if(!document.getElementById('lotCategories'))return;
+ const v=lotValues();
+ lotWeight.textContent=v.totalWeight.toLocaleString('fr-FR')+' kg';
+ lotTotal.textContent=money(v.totalCost);
+ lotAverage.textContent=v.totalWeight?money(v.average)+'/kg':'0 F/kg';
+ lotCheck.textContent=v.totalWeight>0?'Poids saisi':'À saisir';
+ lotBreakdown.innerHTML=v.rows.filter(r=>r.q>0).map(r=>`<div class="row"><div><b>${r.p?.name||'Catégorie'}</b><span class="tag">${r.q.toLocaleString('fr-FR')} kg × ${money(v.average)}/kg</span></div><strong>${money(r.q*v.average)}</strong></div>`).join('')||'<span class="muted">Saisis les poids récupérés pour voir la répartition du coût.</span>';
+}
+function saveLot(){
+ const v=lotValues();
+ if(v.totalCost<=0)return alert("Saisis le coût d'achat et les frais du lot.");
+ if(v.totalWeight<=0)return alert("Saisis au moins un poids récupéré.");
+ if(v.rows.some(r=>r.q<0))return alert("Les poids ne peuvent pas être négatifs.");
+ v.rows.filter(r=>r.q>0).forEach(r=>{r.p.stock+=r.q;r.p.unitCost=v.average;});
+ db.lots=db.lots||[];
+ db.lots.unshift({date:new Date().toISOString(),purchase:v.purchase,slaughter:v.slaughter,transport:v.transport,other:v.other,totalCost:v.totalCost,totalWeight:v.totalWeight,average:v.average,items:v.rows.filter(r=>r.q>0).map(r=>({name:r.p.name,qty:r.q,allocatedCost:r.q*v.average}))});
+ addMove('Lot de porc','Réception par catégories',v.totalWeight,v.totalCost,`Coût moyen ${Math.round(v.average)} F/kg · achat ${v.purchase} F · abattage ${v.slaughter} F · transport ${v.transport} F`);
+ ['lotPurchase','lotSlaughter','lotTransport','lotOther'].forEach(id=>document.getElementById(id).value=0);
+ document.querySelectorAll('.lot-qty').forEach(i=>i.value=0);
+ save();updateLotCalc();alert('Lot enregistré. Les stocks des catégories ont été alimentés.');
+}
+function render(){fillSelect('buyProduct');fillSelect('sellProduct');productList.innerHTML=db.products.map(p=>`<div class="row"><div><b>${p.name}</b><span class="tag">${p.unit} · ${money(p.price)}</span></div><button class="secondary" onclick="editPrice(${p.id})">Prix</button></div>`).join('');
+stockList.innerHTML=db.products.map(p=>`<div class="row"><div><b>${p.name}</b><span class="tag">${p.unit}${p.unitCost?` · coût moyen ${money(p.unitCost)}`:''}</span></div><strong>${p.stock.toLocaleString('fr-FR')}</strong></div>`).join('');
+let day=db.moves.filter(m=>m.date.slice(0,10)===today()),sales=day.filter(m=>m.type==='Vente'),expenses=day.filter(m=>m.type==='Dépense');todaySales.textContent=money(sales.reduce((s,m)=>s+m.amount,0));todayExpenses.textContent=money(expenses.reduce((s,m)=>s+m.amount,0));salesCount.textContent=sales.length;productCount.textContent=db.products.length;
+lowStock.innerHTML=db.products.filter(p=>p.stock<=0).map(p=>`<div class="row"><span>${p.name}</span><b class="danger">Rupture</b></div>`).join('')||'<span class="muted">Aucune rupture de stock.</span>';
+historyList.innerHTML=db.moves.slice(0,30).map(m=>`<div class="row"><div><b>${m.type} · ${m.label}</b><span class="tag">${new Date(m.date).toLocaleString('fr-FR')} ${m.detail?'· '+m.detail:''}</span></div><div style="text-align:right"><b>${money(m.amount)}</b><span class="tag">${m.qty||''}</span></div></div>`).join('')||'<span class="muted">Aucune opération enregistrée.</span>'}
+function editPrice(id){let p=db.products.find(x=>x.id===id),v=prompt('Nouveau prix de vente en FCFA',p.price);if(v!==null&&Number(v)>=0){p.price=Number(v);save()}}
+function exportData(){let b=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='sauvegarde-gestion-royale.json';a.click();URL.revokeObjectURL(a.href)}
+function resetData(){if(confirm('Effacer toutes les opérations et produits de cet appareil ? Cette action est irréversible.')){localStorage.removeItem(KEY);location.reload()}}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));b.classList.add('active');document.getElementById(b.dataset.page).classList.add('active')});
+sellProduct.onchange=()=>{let p=db.products.find(x=>x.id==sellProduct.value);sellPrice.value=p?.price||0};
+render();buildLotCategories();sellProduct.onchange();
+</script>
+<script>if("serviceWorker" in navigator)navigator.serviceWorker.register("./sw.js");</script></body></html>

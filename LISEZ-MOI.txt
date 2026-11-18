@@ -1,0 +1,16 @@
+GESTION ROYALE — PROJET ANDROID
+
+Ce dossier est un projet Android Studio (application WebView locale) qui embarque la version actuelle de l'interface Gestion Royale.
+
+Pour produire l'APK sans installer Android Studio sur le téléphone :
+1. Sur un ordinateur, crée un dépôt GitHub et téléverse le contenu de ce dossier.
+2. Ouvre l'onglet Actions du dépôt.
+3. Lance "Build Gestion Royale APK" (ou attends le build après le push).
+4. Télécharge l'artefact "Gestion-Royale-APK" et récupère app-debug.apk.
+5. Transfère app-debug.apk sur Android et installe-le.
+
+Limites de cette première APK :
+- application locale à un seul appareil ; les données sont conservées dans le stockage local WebView ;
+- pas encore de comptes sécurisés, serveur central, ni synchronisation multi-téléphones ;
+- APK debug de test, pas une version signée de distribution.
+Ne pas utiliser comme système comptable officiel avant sauvegardes et tests.
